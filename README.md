@@ -43,21 +43,53 @@ $ $GOPATH/bin/terraform-provider-alertlogic
 ...
 ```
 
-Using the Provider
+Provider Installation
 ----------------------
 
-To use a released provider in your Terraform environment, run [`terraform init`](https://www.terraform.io/docs/commands/init.html) and Terraform will automatically install the provider. To specify a particular provider version when installing released providers, see the [Terraform documentation on provider versioning](https://www.terraform.io/docs/configuration/providers.html#version-provider-versions).
+To use a custom-built provider in your Terraform environment (e.g. the provider binary from the build instructions above), follow the instructions to [install it as a plugin.](https://www.terraform.io/docs/plugins/basics.html#installing-a-plugin) After placing it into your plugins directory,  run `terraform init` to initialize it.
 
-To instead use a custom-built provider in your Terraform environment (e.g. the provider binary from the build instructions above), follow the instructions to [install it as a plugin.](https://www.terraform.io/docs/plugins/basics.html#installing-a-plugin) After placing it into your plugins directory,  run `terraform init` to initialize it.
+If you are running the `darwin_amd64` architecture, a pre-compiled plugin is provided with each release on the [Releases page](https://algithub.pd.alertlogic.net/daniel-greening/terraform-provider-alertlogic/releases). 
 
-For either installation method, documentation about the provider specific configuration options can be found on the [provider's website](https://localhost:4567/docs/providers/alertlogic/index.html) (when deployed locally). 
-
-
-Setting up Provider Documentation
+Provider Documentation
 ---------------------------------
-The provider documentation is hosted as an add-on to the terraform website. 
+The provider documentation is presented as an add-on to the terraform website.  
 
-You can run this locally by running `make website`, though docker is required and the steps outlined in the [terraform website repo](https://github.com/hashicorp/terraform-website#new-provider-repositories) shall need to be followed before the docs can be created.
+To deploy the docs locally you must perform the following.
+
+```bash
+# clone the terraform website repository into your GOPATH:
+git clone clone https://github.com/hashicorp/terraform-website $GOPATH/src/github.com/hashicorp/terraform-website
+
+# export this provider repo name
+export PROVIDER_REPO=alertlogic
+
+# link the provider repo
+pushd "$GOPATH/src/github.com/hashicorp/terraform-website/ext/providers"
+ln -sf "$GOPATH/src/algithub.alertlogic.pd.net/terraform-provider-$PROVIDER_REPO" "$PROVIDER_REPO"
+popd
+
+# link the layout file
+pushd "$GOPATH/src/github.com/hashicorp/terraform-website/content/source/layouts"
+ln -sf "../../../ext/providers/$PROVIDER_REPO/website/$PROVIDER_REPO.erb" "$PROVIDER_REPO.erb"
+popd
+
+# link the content
+pushd "$GOPATH/src/github.com/hashicorp/terraform-website/content/source/docs/providers"
+ln -sf "../../../../ext/providers/$PROVIDER_REPO/website/docs" "$PROVIDER_REPO"
+popd
+
+# start middleman
+cd "$GOPATH/src/github.com/terraform-provider-$PROVIDER_REPO"
+make website
+
+```
+
+
+$(GOPATH)/src/$(WEBSITE_REPO
+
+You can run this locally by running `make website`. [Docker](https://www.docker.com/) is required and the steps outlined in the [terraform website repo](https://github.com/hashicorp/terraform-website#new-provider-repositories) must to be followed before the docs can be created.
+
+Once the site is up and running, the documentation the provider specific configuration options can be found on the [provider's doc page](https://localhost:4567/docs/providers/alertlogic/index.html). 
 
 Testing the Provider
 ---------------------------
