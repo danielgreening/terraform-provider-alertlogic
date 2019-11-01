@@ -1,0 +1,146 @@
+[
+    {
+        "time": 1567506611,
+        "cookbook": "threat",
+        "recipe": "s2_provagent",
+        "type": "UI",
+        "name": "START_RECIPE: threat::s2_provagent",
+        "action": "START",
+        "state": "Completed"
+    },
+    {
+        "time": 1567506611,
+        "cookbook": "threat",
+        "recipe": "s2_provagent",
+        "type": "log",
+        "name": "api_key found: 811bd9bbcf40555d2d3b06e04d2fc7c48a95f51d2384f5516b",
+        "action": "write",
+        "state": "Start"
+    },
+    {
+        "time": 1567506611,
+        "cookbook": "threat",
+        "recipe": "s2_provagent",
+        "type": "log",
+        "name": "api_key found: 811bd9bbcf40555d2d3b06e04d2fc7c48a95f51d2384f5516b",
+        "action": "write",
+        "state": "Updated"
+    },
+    {
+        "time": 1567506611,
+        "cookbook": "threat",
+        "recipe": "s2_provagent",
+        "type": "log",
+        "name": "api_key found: 811bd9bbcf40555d2d3b06e04d2fc7c48a95f51d2384f5516b",
+        "action": "",
+        "state": "Completed"
+    },
+    {
+        "time": 1567506611,
+        "cookbook": "threat",
+        "recipe": "s2_provagent",
+        "type": "service",
+        "name": "al-threat-remote",
+        "action": "enable",
+        "state": "Start"
+    },
+    {
+        "time": 1567506611,
+        "cookbook": "threat",
+        "recipe": "s2_provagent",
+        "type": "service",
+        "name": "al-threat-remote",
+        "action": "enable",
+        "state": "Skipped"
+    },
+    {
+        "time": 1567506611,
+        "cookbook": "threat",
+        "recipe": "s2_provagent",
+        "type": "service",
+        "name": "al-threat-remote",
+        "action": "",
+        "state": "Completed"
+    },
+    {
+        "time": 1567506611,
+        "cookbook": "threat",
+        "recipe": "s2_provagent",
+        "type": "service",
+        "name": "al-threat-remote",
+        "action": "start",
+        "state": "Start"
+    },
+    {
+        "time": 1567506611,
+        "cookbook": "threat",
+        "recipe": "s2_provagent",
+        "type": "service",
+        "name": "al-threat-remote",
+        "action": "start",
+        "state": "Skipped"
+    },
+    {
+        "time": 1567506611,
+        "cookbook": "threat",
+        "recipe": "s2_provagent",
+        "type": "service",
+        "name": "al-threat-remote",
+        "action": "",
+        "state": "Completed"
+    },
+    {
+        "time": 1567506611,
+        "cookbook": "threat",
+        "recipe": "s2_provagent",
+        "type": "execute",
+        "name": "service-start-al-threat-remote",
+        "action": "nothing",
+        "state": "Start"
+    },
+    {
+        "time": 1567506611,
+        "cookbook": "threat",
+        "recipe": "s2_provagent",
+        "type": "execute",
+        "name": "service-start-al-threat-remote",
+        "action": "nothing",
+        "state": "Skipped"
+    },
+    {
+        "time": 1567506611,
+        "cookbook": "threat",
+        "recipe": "s2_provagent",
+        "type": "execute",
+        "name": "service-start-al-threat-remote",
+        "action": "",
+        "state": "Completed"
+    },
+    {
+        "time": 1567506611,
+        "cookbook": "threat",
+        "recipe": "s2_provagent",
+        "type": "bash",
+        "name": "set_dc_and_prov_agent",
+        "action": "run",
+        "state": "Start"
+    },
+    {
+        "time": 1567506675,
+        "cookbook": "threat",
+        "recipe": "s2_provagent",
+        "type": "bash",
+        "name": "set_dc_and_prov_agent",
+        "action": "run",
+        "state": "Failed"
+    },
+    {
+        "time": 1567506675,
+        "cookbook": "threat",
+        "recipe": "s2_provagent",
+        "type": "bash",
+        "name": "set_dc_and_prov_agent",
+        "action": "",
+        "state": "Completed"
+    }
+]

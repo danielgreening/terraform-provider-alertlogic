@@ -1,0 +1,124 @@
+{
+  "Statement": [
+      {
+        "Action": [
+          "autoscaling:Describe*",
+          "cloudformation:DescribeStack*",
+          "cloudformation:GetTemplate",
+          "cloudformation:ListStack*",
+          "cloudfront:Get*",
+          "cloudfront:List*",
+          "cloudwatch:Describe*",
+          "config:DeliverConfigSnapshot",
+          "config:Describe*",
+          "config:Get*",
+          "config:ListDiscoveredResources",
+          "cur:DescribeReportDefinitions",
+          "directconnect:Describe*",
+          "dynamodb:ListTables",
+          "ec2:Describe*",
+          "elasticbeanstalk:Describe*",
+          "elasticache:Describe*",
+          "elasticloadbalancing:Describe*",
+          "elasticmapreduce:DescribeJobFlows",
+          "events:Describe*",
+          "events:List*",
+          "glacier:ListVaults",
+          "guardduty:Get*",
+          "guardduty:List*",
+          "kinesis:Describe*",
+          "kinesis:List*",
+          "kms:DescribeKey",
+          "kms:GetKeyPolicy",
+          "kms:GetKeyRotationStatus",
+          "kms:ListAliases",
+          "kms:ListGrants",
+          "kms:ListKeys",
+          "kms:ListKeyPolicies",
+          "kms:ListResourceTags",
+          "lambda:List*",
+          "logs:Describe*",
+          "rds:Describe*",
+          "rds:ListTagsForResource",
+          "redshift:Describe*",
+          "route53:GetHostedZone",
+          "route53:ListHostedZones",
+          "route53:ListResourceRecordSets",
+          "sdb:DomainMetadata",
+          "sdb:ListDomains",
+          "sns:ListSubscriptions",
+          "sns:ListSubscriptionsByTopic",
+          "sns:ListTopics",
+          "sns:GetEndpointAttributes",
+          "sns:GetSubscriptionAttributes",
+          "sns:GetTopicAttributes",
+          "s3:ListAllMyBuckets",
+          "s3:ListBucket",
+          "s3:GetBucketLocation",
+          "s3:GetObject",
+          "s3:GetBucket*",
+          "s3:GetLifecycleConfiguration",
+          "s3:GetObjectAcl",
+          "s3:GetObjectVersionAcl",
+          "tag:GetResources",
+          "tag:GetTagKeys"
+        ],
+        "Effect": "Allow",
+        "Resource": "*",
+        "Sid": "EnabledDiscoveryOfVariousAWSServices"
+      },
+      {
+        "Action": [
+          "iam:Get*",
+          "iam:List*",
+          "iam:GenerateCredentialReport"
+        ],
+        "Effect": "Allow",
+        "Resource": "*",
+        "Sid": "EnableInsightDiscovery"
+      },
+      {
+        "Action": [
+          "cloudtrail:DescribeTrails",
+          "cloudtrail:GetEventSelectors",
+          "cloudtrail:GetTrailStatus",
+          "cloudtrail:ListPublicKeys",
+          "cloudtrail:ListTags",
+          "cloudtrail:LookupEvents"
+        ],
+        "Effect": "Allow",
+        "Resource": "*",
+        "Sid": "LimitedCloudTrail"
+      },
+      {
+        "Action": [
+          "sns:ListTopics",
+          "sns:GetTopicAttributes",
+          "sns:Subscribe"
+        ],
+        "Effect": "Allow",
+        "Resource": "arn:aws:sns:*:*:*",
+        "Sid": "LimitedSNSForCloudTrail"
+      },
+      {
+        "Action": [
+          "sqs:GetQueueAttributes",
+          "sqs:ReceiveMessage",
+          "sqs:DeleteMessage",
+          "sqs:GetQueueUrl"
+        ],
+        "Effect": "Allow",
+        "Resource": "arn:aws:sqs:*:*:outcomesbucket*",
+        "Sid": "LimitedSQSForCloudTrail"
+      },
+      {
+        "Action": [
+          "sqs:ListQueues"
+        ],
+        "Effect": "Allow",
+        "Resource": "*",
+        "Sid": "BeAbleToListSQSForCloudTrail"
+      }
+    ],
+    "Version": "2012-10-17"
+}

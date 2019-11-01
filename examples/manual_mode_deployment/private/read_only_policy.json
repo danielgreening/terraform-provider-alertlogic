@@ -1,0 +1,97 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "autoscaling:Describe*",
+        "cloudformation:DescribeStack*",
+        "cloudformation:GetTemplate",
+        "cloudformation:ListStack*",
+        "cloudfront:Get*",
+        "cloudfront:List*",
+        "cloudwatch:Describe*",
+        "directconnect:Describe*",
+        "dynamodb:ListTables",
+        "ec2:Describe*",
+        "elasticbeanstalk:Describe*",
+        "elasticache:Describe*",
+        "elasticloadbalancing:Describe*",
+        "elasticmapreduce:DescribeJobFlows",
+        "glacier:ListVaults",
+        "rds:Describe*",
+        "rds:DownloadDBLogFilePortion",
+        "rds:ListTagsForResource",
+        "redshift:Describe*",
+        "route53:GetHostedZone",
+        "route53:ListHostedZones",
+        "route53:ListResourceRecordSets",
+        "sdb:DomainMetadata",
+        "sdb:ListDomains",
+        "s3:ListAllMyBuckets",
+        "s3:ListBucket",
+        "s3:GetBucketLocation",
+        "s3:GetBucket*",
+        "s3:GetLifecycleConfiguration",
+        "s3:GetObjectAcl",
+        "s3:GetObjectVersionAcl"
+      ],
+      "Resource": "*",
+      "Effect": "Allow",
+      "Sid": "EnabledDiscoveryOfVariousAWSServices"
+    },
+    {
+      "Action": [
+        "iam:Get*",
+        "iam:List*",
+        "iam:ListRoles",
+        "iam:GetRolePolicy",
+        "iam:GetAccountSummary",
+        "iam:GenerateCredentialReport"
+      ],
+      "Resource": "*",
+      "Effect": "Allow",
+      "Sid": "EnableInsightDiscovery"
+    },
+    {
+      "Action": [
+        "cloudtrail:DescribeTrails",
+        "cloudtrail:GetTrailStatus",
+        "cloudtrail:ListPublicKeys",
+        "cloudtrail:ListTags",
+        "cloudtrail:LookupEvents"
+      ],
+      "Resource": "*",
+      "Effect": "Allow",
+      "Sid": "LimitedCloudTrail"
+    },
+    {
+      "Action": [
+        "sns:listtopics",
+        "sns:gettopicattributes",
+        "sns:subscribe"
+      ],
+      "Resource": "arn:aws:sns:*:*:*",
+      "Effect": "Allow",
+      "Sid": "LimitedSNSForCloudTrail"
+    },
+    {
+      "Action": [
+        "sqs:GetQueueAttributes",
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueUrl"
+      ],
+      "Resource": "arn:aws:sqs:*:*:outcomesbucket*",
+      "Effect": "Allow",
+      "Sid": "LimitedSQSForCloudTrail"
+    },
+    {
+      "Action": [
+        "sqs:ListQueues"
+      ],
+      "Resource": "*",
+      "Effect": "Allow",
+      "Sid": "BeAbleToListSQSForCloudTrail"
+    }
+  ]
+}

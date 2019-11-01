@@ -1,0 +1,11 @@
+# Intellij artifacts
+.idea/
+*.iml
+
+# Terraform State
+.terraform/
+*.tfstate
+*.tfstate.backup
+
+# Build
+_build/

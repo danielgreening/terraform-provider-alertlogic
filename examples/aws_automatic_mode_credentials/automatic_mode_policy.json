@@ -1,0 +1,255 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "autoscaling:Describe*",
+        "cloudformation:DescribeStack*",
+        "cloudformation:GetTemplate",
+        "cloudformation:ListStack*",
+        "cloudfront:Get*",
+        "cloudfront:List*",
+        "cloudwatch:Describe*",
+        "config:DeliverConfigSnapshot",
+        "config:Describe*",
+        "config:Get*",
+        "config:ListDiscoveredResources",
+        "cur:DescribeReportDefinitions",
+        "directconnect:Describe*",
+        "dynamodb:ListTables",
+        "ec2:Describe*",
+        "elasticbeanstalk:Describe*",
+        "elasticache:Describe*",
+        "elasticloadbalancing:Describe*",
+        "elasticmapreduce:DescribeJobFlows",
+        "events:Describe*",
+        "events:List*",
+        "glacier:ListVaults",
+        "guardduty:Get*",
+        "guardduty:List*",
+        "kinesis:Describe*",
+        "kinesis:List*",
+        "kms:DescribeKey",
+        "kms:GetKeyPolicy",
+        "kms:GetKeyRotationStatus",
+        "kms:ListAliases",
+        "kms:ListGrants",
+        "kms:ListKeys",
+        "kms:ListKeyPolicies",
+        "kms:ListResourceTags",
+        "lambda:List*",
+        "logs:Describe*",
+        "rds:Describe*",
+        "rds:ListTagsForResource",
+        "redshift:Describe*",
+        "route53:GetHostedZone",
+        "route53:ListHostedZones",
+        "route53:ListResourceRecordSets",
+        "sdb:DomainMetadata",
+        "sdb:ListDomains",
+        "sns:ListSubscriptions",
+        "sns:ListSubscriptionsByTopic",
+        "sns:ListTopics",
+        "sns:GetEndpointAttributes",
+        "sns:GetSubscriptionAttributes",
+        "sns:GetTopicAttributes",
+        "s3:ListAllMyBuckets",
+        "s3:ListBucket",
+        "s3:GetBucketLocation",
+        "s3:GetObject",
+        "s3:GetBucket*",
+        "s3:GetLifecycleConfiguration",
+        "s3:GetObjectAcl",
+        "s3:GetObjectVersionAcl",
+        "tag:GetResources",
+        "tag:GetTagKeys"
+      ],
+      "Resource": "*",
+      "Effect": "Allow",
+      "Sid": "EnabledDiscoveryOfVariousAWSServices"
+    },
+    {
+      "Action": [
+        "iam:Get*",
+        "iam:List*",
+        "iam:GenerateCredentialReport"
+      ],
+      "Resource": "*",
+      "Effect": "Allow",
+      "Sid": "EnableInsightDiscovery"
+    },
+    {
+      "Action": [
+        "cloudtrail:Describe*",
+        "cloudtrail:Get*",
+        "cloudtrail:List*",
+        "cloudtrail:LookupEvents",
+        "cloudtrail:StartLogging",
+        "cloudtrail:UpdateTrail"
+      ],
+      "Resource": "*",
+      "Effect": "Allow",
+      "Sid": "EnableCloudTrailIfAccountDoesntHaveCloudTrailsEnabled"
+    },
+    {
+      "Action": [
+        "s3:CreateBucket",
+        "s3:PutBucketPolicy",
+        "s3:DeleteBucket"
+      ],
+      "Resource": "arn:aws:s3:::outcomesbucket-*",
+      "Effect": "Allow",
+      "Sid": "CreateCloudTrailS3BucketIfCloudTrailsAreBeingSetupByAlertLogic"
+    },
+    {
+      "Action": [
+        "sns:CreateTopic",
+        "sns:DeleteTopic"
+      ],
+      "Resource": "arn:aws:sns:*:*:outcomestopic",
+      "Effect": "Allow",
+      "Sid": "CreateCloudTrailsTopicTfOneWasntAlreadySetupForCloudTrails"
+    },
+    {
+      "Action": [
+        "sns:AddPermission",
+        "sns:GetTopicAttributes",
+        "sns:ListTopics",
+        "sns:SetTopicAttributes",
+        "sns:Subscribe"
+      ],
+      "Resource": "arn:aws:sns:*:*:*",
+      "Effect": "Allow",
+      "Sid": "MakeSureThatCloudTrailsSnsTopicIsSetupCorrectlyForCloudTrailPublishingAndSqsSubsription"
+    },
+    {
+      "Action": [
+        "sqs:CreateQueue",
+        "sqs:DeleteQueue",
+        "sqs:SetQueueAttributes",
+        "sqs:GetQueueAttributes",
+        "sqs:ListQueues",
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueUrl"
+      ],
+      "Resource": "arn:aws:sqs:*:*:outcomesbucket*",
+      "Effect": "Allow",
+      "Sid": "CreateAlertLogicSqsQueueToSubscribeToCloudTrailsSnsTopicNotifications"
+    },
+    {
+      "Action": [
+        "ec2:CreateTags",
+        "ec2:CreateSubnet",
+        "ec2:CreateInternetGateway",
+        "ec2:AttachInternetGateway",
+        "ec2:CreateRoute",
+        "ec2:CreateRouteTable",
+        "ec2:AssociateRouteTable",
+        "ec2:CreateSecurityGroup",
+        "ec2:CreateKeyPair",
+        "ec2:ImportKeyPair",
+        "ec2:CreateNetworkAcl",
+        "ec2:CreateNetworkAclEntry"
+      ],
+      "Resource": "*",
+      "Effect": "Allow",
+      "Sid": "EnableAlertLogicSecurityInfrastructureDeployment"
+    },
+    {
+      "Condition": {
+        "StringEquals": {
+          "ec2:ResourceTag/AlertLogic": "Security"
+        }
+      },
+      "Action": [
+        "ec2:AuthorizeSecurityGroupIngress",
+        "ec2:AuthorizeSecurityGroupEgress",
+        "ec2:RevokeSecurityGroupIngress",
+        "ec2:RevokeSecurityGroupEgress",
+        "ec2:DeleteSecurityGroup",
+        "ec2:DeleteNetworkAclEntry",
+        "ec2:DeleteRouteTable"
+      ],
+      "Resource": [
+        "arn:aws:ec2:*:*:security-group/*",
+        "arn:aws:ec2:*:*:route-table/*",
+        "arn:aws:ec2:*:*:network-acl/*"
+      ],
+      "Effect": "Allow",
+      "Sid": "ModifyNetworkSettingsToEnableNetworkVisibilityFromAlertLogicSecurityAppliance"
+    },
+    {
+      "Condition": {
+        "StringEquals": {
+          "ec2:ResourceTag/AlertLogic": "Security"
+        }
+      },
+      "Action": [
+        "ec2:ReplaceNetworkAclAssociation",
+        "ec2:DeleteNetworkAcl",
+        "ec2:DeleteRoute"
+      ],
+      "Resource": "*",
+      "Effect": "Allow",
+      "Sid": "FineGrainedNetworkingManagement"
+    },
+    {
+      "Action": [
+        "ec2:DeleteSubnet"
+      ],
+      "Resource": "*",
+      "Effect": "Allow",
+      "Sid": "DeleteSecuritySubnet"
+    },
+    {
+      "Action": [
+        "ec2:RunInstances"
+      ],
+      "Resource": [
+        "arn:aws:ec2:*:*:instance/*",
+        "arn:aws:ec2:*:*:volume/*",
+        "arn:aws:ec2:*:*:network-interface/*",
+        "arn:aws:ec2:*:*:key-pair/*",
+        "arn:aws:ec2:*:*:security-group/*"
+      ],
+      "Effect": "Allow",
+      "Sid": "EnsureThatAlertLogicApplianceCanCreateNecessaryResources"
+    },
+    {
+      "Condition": {
+        "StringEquals": {
+          "ec2:ResourceTag/AlertLogic": "Security"
+        }
+      },
+      "Action": [
+        "ec2:TerminateInstances",
+        "ec2:StartInstances",
+        "ec2:StopInstances"
+      ],
+      "Resource": "arn:aws:ec2:*:*:instance/*",
+      "Effect": "Allow",
+      "Sid": "EnabletAlertLogicApplianceStateManagement"
+    },
+    {
+      "Action": [
+        "autoscaling:CreateLaunchConfiguration",
+        "autoscaling:DeleteLaunchConfiguration",
+        "autoscaling:CreateAutoScalingGroup",
+        "autoscaling:UpdateAutoScalingGroup",
+        "autoscaling:DeleteAutoScalingGroup"
+      ],
+      "Resource": "*",
+      "Effect": "Allow",
+      "Sid": "EnableAlertLogicAutoScalingGroup"
+    },
+    {
+      "Action": [
+        "iam:CreateServiceLinkedRole"
+      ],
+      "Resource": "arn:aws:iam::*:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling*",
+      "Effect": "Allow",
+      "Sid": "EnableCreationOfServiceLinkedRoleForAutoscaling"
+    }
+  ]
+}
