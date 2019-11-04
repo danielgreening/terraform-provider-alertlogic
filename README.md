@@ -11,7 +11,72 @@ Requirements
 ------------
 
 - [Terraform](https://www.terraform.io/downloads.html) 0.12+
-- [Go](https://golang.org/doc/install) 1.13 (to build the provider plugin)
+- [Go](https://golang.org/doc/install) 1.13 (to build the provider plugin from source)
+- [Docker](https://www.docker.com/products/docker-desktop) 19.0.3+ (to build provider documentation)
+
+Building Documentation
+---------------------------------
+The provider documentation is presented as an add-on to the terraform website.  
+
+You can preview the website from a local checkout of this repo as follows:
+
+1. Install [Docker](https://docs.docker.com/install/) if you have not already done so.
+2. Go to the top directory of this repo in your terminal, and run `make website`.
+3. Open `http://localhost:4567` in your web browser.
+4. When you're done with the preview, press ctrl-C in your terminal to stop the server.
+
+Once the site is up and running, the documentation the provider specific configuration options can be found on the [provider's doc page](https://localhost:4567/docs/providers/alertlogic/index.html). 
+
+Provider Installation
+----------------------
+
+To use a custom-built provider in your Terraform environment (e.g. the provider binary from the build instructions above), follow the instructions to [install it as a plugin.](https://www.terraform.io/docs/plugins/basics.html#installing-a-plugin) After placing it into your plugins directory,  run `terraform init` to initialize it.
+
+If you are running the `darwin_amd64` architecture, a pre-compiled plugin is provided with each release on the [Releases page](https://algithub.pd.alertlogic.net/daniel-greening/terraform-provider-alertlogic/releases). You can begin using the plugin by simply by placing the binary in the third-party plugins directory, see the [Terraform docs](https://www.terraform.io/docs/configuration/providers.html#third-party-plugins) for more information on third-party plugins. 
+
+Configuring the Provider
+----------------------
+
+Once installed, you must provide a means of configuring the provider before you may start creating resources. 
+
+The following configuration options are supported:
+
+- Endpoint - the Alert Logic API endpoint to call when creating resources
+- Access Key ID - the ID of the Alert Logic access key ID  
+- Secret Access Key - the secret key associated with the given Alert Logic access key  
+
+Currently, only AIMS access keys are supported as a means of authentication. See the [AIMS API docs](https://console.cloudinsight.alertlogic.com/api/aims/#api-AIMS_User_Resources-CreateAccessKey) for information on creating access keys for your Alert Logic User.
+
+Once you have an access key and corresponding secret key set up, there are two mechanisms for passing them to the provider: 
+
+### Provider argument
+The provider can be configured directly in Terraform HCL:
+
+Example Terraform HCL configuration:
+```hcl
+provider alertlogic {
+  access_key_id = "your-access-key"
+  secret_access_key = "your-secret-key"
+  endpoint = "https://api.cloudinsight.alertlogic.com" // US Production
+}
+```
+
+### Environment Variables
+If no arguments are found for the provider in the HCL, then environment variables can be used instead:
+
+Example Terraform HCL configuration
+```hcl
+provider alertlogic {}
+```
+
+Corresponding variables:
+```bash
+export ALERTLOGIC_ACCESS_KEY_ID="your-access-key"
+export ALERTLOGIC_SECRET_ACCESS_KEY="your-secret-key"
+export ALERTLOGIC_ENDPOINT="https://api.cloudinsight.alertlogic.com"
+```
+
+Further information on configuring and workable examples can be found in the [Provider Documentation](#Building-Documentation)
 
 Developing the Provider
 ---------------------
@@ -43,54 +108,6 @@ $ $GOPATH/bin/terraform-provider-alertlogic
 ...
 ```
 
-Provider Installation
-----------------------
-
-To use a custom-built provider in your Terraform environment (e.g. the provider binary from the build instructions above), follow the instructions to [install it as a plugin.](https://www.terraform.io/docs/plugins/basics.html#installing-a-plugin) After placing it into your plugins directory,  run `terraform init` to initialize it.
-
-If you are running the `darwin_amd64` architecture, a pre-compiled plugin is provided with each release on the [Releases page](https://algithub.pd.alertlogic.net/daniel-greening/terraform-provider-alertlogic/releases). 
-
-Provider Documentation
----------------------------------
-The provider documentation is presented as an add-on to the terraform website.  
-
-To deploy the docs locally you must perform the following.
-
-```bash
-# clone the terraform website repository into your GOPATH:
-git clone clone https://github.com/hashicorp/terraform-website $GOPATH/src/github.com/hashicorp/terraform-website
-
-# export this provider repo name
-export PROVIDER_REPO=alertlogic
-
-# link the provider repo
-pushd "$GOPATH/src/github.com/hashicorp/terraform-website/ext/providers"
-ln -sf "$GOPATH/src/algithub.alertlogic.pd.net/terraform-provider-$PROVIDER_REPO" "$PROVIDER_REPO"
-popd
-
-# link the layout file
-pushd "$GOPATH/src/github.com/hashicorp/terraform-website/content/source/layouts"
-ln -sf "../../../ext/providers/$PROVIDER_REPO/website/$PROVIDER_REPO.erb" "$PROVIDER_REPO.erb"
-popd
-
-# link the content
-pushd "$GOPATH/src/github.com/hashicorp/terraform-website/content/source/docs/providers"
-ln -sf "../../../../ext/providers/$PROVIDER_REPO/website/docs" "$PROVIDER_REPO"
-popd
-
-# start middleman
-cd "$GOPATH/src/github.com/terraform-provider-$PROVIDER_REPO"
-make website
-
-```
-
-
-$(GOPATH)/src/$(WEBSITE_REPO
-
-You can run this locally by running `make website`. [Docker](https://www.docker.com/) is required and the steps outlined in the [terraform website repo](https://github.com/hashicorp/terraform-website#new-provider-repositories) must to be followed before the docs can be created.
-
-Once the site is up and running, the documentation the provider specific configuration options can be found on the [provider's doc page](https://localhost:4567/docs/providers/alertlogic/index.html). 
-
 Testing the Provider
 ---------------------------
 
@@ -103,7 +120,7 @@ $ make test
 
 In order to run the full suite of Acceptance tests, run `make testacc`.
 
-*Note:* Acceptance tests create real resources, and often cost money to run. Please read [Running an Acceptance Test](https://github.com/terraform-providers/terraform-provider-aws/blob/master/.github/CONTRIBUTING.md#running-an-acceptance-test) in the contribution guidelines for more information on usage.
+*Note:* `ALERTLOGIC_ACCESS_KEY_ID` or `ALERTLOGIC_SECRET_ACCESS_KEY` must be set for acceptance testing. For more info on setting up access key authentication, see the [AIMS API docs](https://console.cloudinsight.alertlogic.com/api/aims/#api-AIMS_User_Resources-CreateAccessKey)
 
 ```sh
 $ make testacc

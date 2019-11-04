@@ -16,7 +16,7 @@ testacc: fmtcheck
 
 fmt:
 	@echo "==> Fixing source code with gofmt..."
-	gofmt -s -w ./$(PKG_NAME)
+	gofmt -s -w ./$(PKG_NAME) ./al-client-base
 
 fmtcheck:
 	@sh -c "'$(CURDIR)/scripts/gofmtcheck.sh'"
@@ -75,6 +75,15 @@ ifeq (,$(wildcard $(GOPATH)/src/$(WEBSITE_REPO)))
 	echo "$(WEBSITE_REPO) not found in your GOPATH (necessary for layouts and assets), get-ting..."
 	git clone https://$(WEBSITE_REPO) $(GOPATH)/src/$(WEBSITE_REPO)
 endif
+	pushd "$GOPATH/src/github.com/hashicorp/terraform-website/ext/providers"
+	ln -sf "$GOPATH/src/algithub.alertlogic.pd.net/terraform-provider-$PROVIDER_REPO" "$PROVIDER_REPO"
+	popd
+	pushd "$GOPATH/src/github.com/hashicorp/terraform-website/content/source/layouts"
+	ln -sf "../../../ext/providers/$PROVIDER_REPO/website/$PROVIDER_REPO.erb" "$PROVIDER_REPO.erb"
+	popd
+	pushd "$GOPATH/src/github.com/hashicorp/terraform-website/content/source/docs/providers"
+	ln -sf "../../../../ext/providers/$PROVIDER_REPO/website/docs" "$PROVIDER_REPO"
+	popd
 	@$(MAKE) -C $(GOPATH)/src/$(WEBSITE_REPO) website-provider-test PROVIDER_PATH=$(shell pwd) PROVIDER_NAME=$(PKG_NAME)
 
 .PHONY: build gen sweep test testacc fmt fmtcheck lint tools test-compile website website-lint website-test

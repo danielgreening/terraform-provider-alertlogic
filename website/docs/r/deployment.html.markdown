@@ -75,7 +75,8 @@ resource "alertlogic_deployment" "test_azure_client_credential" {
   
   scope_include {
   	type = "vpc"
-  	key =  "/azure/region/vpc/vnet-id"
+  	key =  "/azure/region-name/vpc/vnet-id"
+  	policy_id = "D12D5E67-166C-474F-87AA-6F86FC9FB9BC"
   }
 }
 ```

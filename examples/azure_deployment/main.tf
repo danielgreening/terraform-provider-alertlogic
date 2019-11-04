@@ -10,7 +10,6 @@ provider "azuread" {
 
 provider "azurerm" {
   version = "1.28"
-  subscription_id = "05dcd414-c680-4f2c-8716-058cd058974b"
 }
 
 data "azurerm_subscription" "primary" {}

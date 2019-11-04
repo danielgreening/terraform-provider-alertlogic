@@ -5,7 +5,6 @@ provider "aws" {
 
 provider "alertlogic" {
   endpoint = "https://api.product.dev.alertlogic.com"
-//  endpoint = "https://api.cloudinsight.alertlogic.com"
 }
 
 locals{
@@ -20,15 +19,13 @@ data "aws_caller_identity" "current" {}
 
 //data "alertlogic_account_details" "Test" {}
 
-resource "aws_iam_role" "automatic_mode" {
+resource "aws_iam_role" "manual_mode" {
   assume_role_policy = data.aws_iam_policy_document.manual_mode.json
 }
 
 resource "aws_iam_role_policy" "manual_mode" {
   policy      = file("private/manual_policy.json")
-//  policy      = file("private/read_only_policy.json")
-//  policy      = file("private/read_only_policy_latest.json")
-  role       = aws_iam_role.automatic_mode.id
+  role       = aws_iam_role.manual_mode.id
 }
 
 data "aws_iam_policy_document" "manual_mode" {
@@ -83,23 +80,24 @@ resource "aws_route_table_association" "a" {
 resource "alertlogic_credential" "test_credential_2" {
   name        = "dgreening-terraform-credential1"
   secret_type = "aws_iam_role"
-  secret_arn  = aws_iam_role.automatic_mode.arn
+  secret_arn  = aws_iam_role.manual_mode.arn
 }
 
 resource "alertlogic_deployment" "test_deployment_1" {
+  account_id    = var.al_account_id
   name          = "dgreening-terraform-1"
   platform_type = "aws"
   platform_id   = data.aws_caller_identity.current.account_id
   mode          = "manual"
-//  scope_include {
-//    type = "region"
-//    key  = "/aws/eu-west-2"
-//    policy_id = "D12D5E67-166C-474F-87AA-6F86FC9FB9BC"
-//  }
-//  credential {
-//      id = alertlogic_credential.test_credential_2.id
-//      purpose = "discover"
-//  }
+  scope_include {
+    type = "region"
+    key  = var.aws_region
+    policy_id = "D12D5E67-166C-474F-87AA-6F86FC9FB9BC"
+  }
+  credential {
+      id = alertlogic_credential.test_credential_2.id
+      purpose = "discover"
+  }
   cloud_defender_location_id = "defender-us-denver"
   cloud_defender_enabled = false
   depends_on = ["aws_iam_role_policy.manual_mode"]
@@ -115,10 +113,10 @@ module "scan_appliance" {
   instance_type = "c5.large"
 }
 
-//module "scan_targets" {
-//  source = "./modules/scan-target"
-//  aws_region = var.aws_region
-//  subnet_id = aws_subnet.default_subnet.id
-//  vpc_id = aws_vpc.default_vpc.id
-//  target_number = "2"
-//}
+module "scan_targets" {
+  source = "./modules/scan-target"
+  aws_region = var.aws_region
+  subnet_id = aws_subnet.default_subnet.id
+  vpc_id = aws_vpc.default_vpc.id
+  target_number = "2"
+}
