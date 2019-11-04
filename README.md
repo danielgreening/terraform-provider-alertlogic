@@ -22,7 +22,7 @@ You can preview the website from a local checkout of this repo as follows:
 
 1. Install [Docker](https://docs.docker.com/install/) if you have not already done so.
 2. Go to the top directory of this repo in your terminal, and run `make website`.
-3. Open `http://localhost:4567` in your web browser.
+3. Navigate to `http://localhost:4567/docs/providers/alertlogic` in your web browser.
 4. When you're done with the preview, press ctrl-C in your terminal to stop the server.
 
 Once the site is up and running, the documentation the provider specific configuration options can be found on the [provider's doc page](https://localhost:4567/docs/providers/alertlogic/index.html). 
