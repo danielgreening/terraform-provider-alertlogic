@@ -27,6 +27,14 @@ You can preview the website from a local checkout of this repo as follows:
 
 Once the site is up and running, the documentation the provider specific configuration options can be found on the [provider's doc page](https://localhost:4567/docs/providers/alertlogic/index.html). 
 
+Building Provider from Source
+---------------------------------
+You can build the provider binary from source, perform the following:
+
+1. Install [Go](https://golang.org/doc/install) (>1.13) if you have not already done so
+2. Go to the top directory of this repo in your terminal, and run `make`.
+3. You can now find the binary in your go bin ($GOPATH/bin by default)
+
 Provider Installation
 ----------------------
 
